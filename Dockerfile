@@ -15,8 +15,7 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - & \
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(dpkg --status tzdata|grep Provides|cut -f2 -d'-') stable"
 
 RUN apt-get update && apt-cache policy docker-ce && apt-get install -y docker-ce --allow-unauthenticated
-# RUN curl https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz | tar zx && \
-    # mv /root/docker/* /bin/ && chmod +x /bin/docker* && \
+
 RUN pip install docker-compose==${DOCKER_COMPOSE_VERSION}
 
 # Install entrykit
