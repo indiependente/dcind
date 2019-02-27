@@ -1,18 +1,24 @@
 # Inspired by https://github.com/mumoshu/dcind
-FROM alpine:3.7
-MAINTAINER Dmitry Matrosov <amidos@amidos.me>
+FROM golang:latest
+MAINTAINER Francesco Farina <rockerg991@gmail.com>
 
-ENV DOCKER_VERSION=17.05.0-ce \
+ENV DOCKER_VERSION=18.09.2 \
     DOCKER_COMPOSE_VERSION=1.18.0 \
     ENTRYKIT_VERSION=0.4.0
 
 # Install Docker and Docker Compose
-RUN apk --update --no-cache \
-    add curl device-mapper py-pip iptables && \
-    rm -rf /var/cache/apk/* && \
-    curl https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz | tar zx && \
-    mv /docker/* /bin/ && chmod +x /bin/docker* && \
-    pip install docker-compose==${DOCKER_COMPOSE_VERSION}
+WORKDIR /root
+
+RUN apt-get update && \
+    apt-get install -y zip dmsetup python-pip iptables apt-transport-https ca-certificates curl gnupg2 software-properties-common
+
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - & \
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(dpkg --status tzdata|grep Provides|cut -f2 -d'-') stable"
+
+RUN apt-get update && apt-cache policy docker-ce && apt-get install -y docker-ce --allow-unauthenticated
+# RUN curl https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz | tar zx && \
+    # mv /root/docker/* /bin/ && chmod +x /bin/docker* && \
+RUN pip install docker-compose==${DOCKER_COMPOSE_VERSION}
 
 # Install entrykit
 RUN curl -L https://github.com/progrium/entrykit/releases/download/v${ENTRYKIT_VERSION}/entrykit_${ENTRYKIT_VERSION}_Linux_x86_64.tgz | tar zx && \
@@ -28,5 +34,5 @@ ENTRYPOINT [ \
 	"switch", \
 		"shell=/bin/sh", "--", \
 	"codep", \
-		"/bin/docker daemon" \
+		"/usr/bin/dockerd" \
 ]
