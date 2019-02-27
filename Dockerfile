@@ -2,8 +2,7 @@
 FROM golang:latest
 MAINTAINER Francesco Farina <rockerg991@gmail.com>
 
-ENV DOCKER_VERSION=18.09.2 \
-    DOCKER_COMPOSE_VERSION=1.18.0 \
+ENV DOCKER_COMPOSE_VERSION=1.18.0 \
     ENTRYKIT_VERSION=0.4.0
 
 # Install Docker and Docker Compose
