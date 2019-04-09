@@ -2,7 +2,8 @@
 FROM golang:latest
 MAINTAINER Francesco Farina <rockerg991@gmail.com>
 
-ENV DOCKER_COMPOSE_VERSION=1.18.0 \
+ENV DOCKER_VERSION=17.09.1~ce-0~debian \
+    DOCKER_COMPOSE_VERSION=1.18.0 \
     ENTRYKIT_VERSION=0.4.0
 
 WORKDIR /root
@@ -15,7 +16,7 @@ RUN apt-get update && \
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(dpkg --status tzdata|grep Provides|cut -f2 -d'-') stable"
 
-RUN apt-get update && apt-cache policy docker-ce && apt-get install -y docker-ce --allow-unauthenticated && \
+RUN apt-get update && apt-cache policy docker-ce && apt-get install -y docker-ce=${DOCKER_VERSION} --allow-unauthenticated && \
     pip install docker-compose==${DOCKER_COMPOSE_VERSION}
 
 RUN go get -u github.com/golang/dep/cmd/dep && \
