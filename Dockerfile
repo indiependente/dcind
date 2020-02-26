@@ -1,5 +1,5 @@
 # Inspired by https://github.com/mumoshu/dcind
-FROM golang:1.13
+FROM golang:1.14
 MAINTAINER Francesco Farina <rockerg991@gmail.com>
 
 ENV DOCKER_VERSION=17.12.0~ce-0~debian \
